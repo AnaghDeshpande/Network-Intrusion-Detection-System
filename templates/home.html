@@ -1,0 +1,19 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Intrusion Detection System</title>
+</head>
+<body>
+    <h1>NIDS</h1>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Assumenda labore minus quod error libero quas, accusamus tenetur veritatis et ad? Quam officia delectus facere nam et nisi quod placeat error.</p>
+
+    {% if probs.any() or prediction.any() %}
+        <h2>Model Training Results</h2>
+        <h3>Predicted Class: {{ prediction }}</h3>
+        <h3>Class Probabilities:</h3>
+        <pre>{{ probs }}</pre>
+    {% endif %}
+
+</body>
+</html>

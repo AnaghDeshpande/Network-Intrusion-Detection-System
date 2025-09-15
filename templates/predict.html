@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIDS Prediction Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, select {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      grid-column: span 3;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>NIDS Prediction Form</h2>
+  <form action="/predict" method="POST">
+    
+    <!-- Numeric fields -->
+    <div>
+      <label for="duration">Duration</label>
+      <input type="number" step="any" name="duration" value="0">
+    </div>
+    <div>
+      <label for="src_bytes">Source Bytes</label>
+      <input type="number" step="any" name="src_bytes" value="181">
+    </div>
+    <div>
+      <label for="dst_bytes">Destination Bytes</label>
+      <input type="number" step="any" name="dst_bytes" value="5450">
+    </div>
+
+    <!-- Categorical fields -->
+    <div>
+      <label for="protocol_type">Protocol Type</label>
+      <select name="protocol_type">
+        <option value="tcp" selected>tcp</option>
+        <option value="udp">udp</option>
+        <option value="icmp">icmp</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="service">Service</label>
+      <select name="service">
+        <option value="http" selected>http</option>
+        <option value="ftp">ftp</option>
+        <option value="smtp">smtp</option>
+        <option value="domain_u">domain_u</option>
+        <option value="eco_i">eco_i</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="flag">Flag</label>
+      <select name="flag">
+        <option value="SF" selected>SF</option>
+        <option value="S0">S0</option>
+        <option value="REJ">REJ</option>
+        <option value="RSTR">RSTR</option>
+      </select>
+    </div>
+
+    <!-- More numeric fields (examples) -->
+    <div>
+      <label for="wrong_fragment">Wrong Fragment</label>
+      <input type="number" step="any" name="wrong_fragment" value="0">
+    </div>
+    <div>
+      <label for="urgent">Urgent</label>
+      <input type="number" step="any" name="urgent" value="0">
+    </div>
+    <div>
+      <label for="hot">Hot</label>
+      <input type="number" step="any" name="hot" value="0">
+    </div>
+    <div>
+      <label for="num_failed_logins">Num Failed Logins</label>
+      <input type="number" step="any" name="num_failed_logins" value="0">
+    </div>
+    <div>
+      <label for="logged_in">Logged In</label>
+      <input type="number" step="any" name="logged_in" value="1">
+    </div>
+    <div>
+      <label for="count">Count</label>
+      <input type="number" step="any" name="count" value="2">
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit">Predict Attack Category</button>
+
+    
+    <p>prediction : {{prediction}}</p>
+    
+  </form>
+</body>
+</html>
