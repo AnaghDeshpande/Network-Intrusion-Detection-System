@@ -19,9 +19,8 @@ def train_pipeline(train_path, epochs=50, batch_size=128, seq_len=10, model_save
 
     df = load_nsl_kdd(train_path)
     df = assign_column_names_if_possible(df)
-    df = map_attack_category(df, label_col="label")
-
-    X, y, preproc, label_enc, feature_name = preprocess_dataframe(df, categorical_cols=None, use_onehot=True)
+    df = map_attack_category(df, label_col="label") 
+    X, y, preproc, label_enc, feature_name, balanced_df = preprocess_dataframe(df, categorical_cols=None, use_onehot=True, apply_smote=True)
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
@@ -69,6 +68,12 @@ def train_pipeline(train_path, epochs=50, batch_size=128, seq_len=10, model_save
     print("Training complete. Model saved to", model_save_path)
 
     return model, preproc, label_enc, history, results
+
+if __name__ == "__main__":
+    train_path = "data/NSL-KDD/KDDTrain+.txt"
+    model, preproc, label_enc, history, results = train_pipeline(train_path, epochs=50, 
+                                            batch_size=128, seq_len=10, model_save_path="nids_cnn_bilstm.h5")
+    print("Results:", results)
 
 
 """

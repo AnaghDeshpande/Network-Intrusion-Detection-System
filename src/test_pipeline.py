@@ -16,7 +16,7 @@ def test_pipeline(test_path, model_path="nids_cnn_bilstm.h5", preproc_path="prep
     label_enc = joblib.load(label_enc_path)
 
     # Apply same preprocessing (do NOT refit!)
-    X_test, y_test, _, _, _ = preprocess_dataframe(df_test, categorical_cols=None, use_onehot=True)
+    X_test, y_test, _, _, _, _ = preprocess_dataframe(df_test, categorical_cols=None, use_onehot=True, apply_smote=False)
     
     # Make sure preprocessing is consistent
     X_test = preproc.transform(df_test.drop(columns=["attack_category", "label"]))

@@ -1,6 +1,6 @@
-# from .model import *
-# from .train_pipline import *
-# from .data_processor import *
+# from model import *
+# from train_pipeline import *
+# from data_processor import *
 
 from src.model import *
 from src.train_pipeline import *

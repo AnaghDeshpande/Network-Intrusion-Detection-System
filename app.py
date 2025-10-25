@@ -85,16 +85,11 @@ def predict():
     print("Predicted:", pred_label)
     print("Probabilities:", probs[0])
     
-    pairs = list(zip(label_enc.classes_, probs[0].tolist()))
+    confidence_score = list(zip(label_enc.classes_, probs[0].tolist()))
+    confidence_score.sort(key=lambda x: x[1], reverse=True)
 
-    # return render_template(
-    # "predict.html",
-    # prediction=int(pred_idx),
-    # label=pred_label,
-    # pairs=pairs
-    # )
-    return render_template("predict.html", probs = probs, prediction=pred_label)
-    # return render_template("predict.html", prediction = int(pred_idx), label=pred_label, probabilities=probs[0].tolist()) 
+    return render_template("predict.html", prediction=int(pred_idx), label=pred_label, confidence_score=confidence_score)
+   
 
 if __name__ == "__main__":
     app.run(debug=True)
