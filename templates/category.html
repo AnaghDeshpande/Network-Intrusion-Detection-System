@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attack Category Prediction - NIDS</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        max-width: 700px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 28px;
+      }
+
+      .subtitle {
+        color: #666;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .info-box {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-left: 4px solid #1e88e5;
+        padding: 15px;
+        margin-bottom: 25px;
+        border-radius: 8px;
+      }
+
+      .info-box h3 {
+        color: #0d47a1;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      .categories {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        font-size: 13px;
+      }
+
+      .category-item {
+        display: flex;
+        align-items: center;
+      }
+
+      .category-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 11px;
+        margin-right: 8px;
+      }
+
+      .badge-normal {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .badge-dos {
+        background: #ffebee;
+        color: #c62828;
+      }
+
+      .badge-probe {
+        background: #fff3e0;
+        color: #ef6c00;
+      }
+
+      .badge-r2l {
+        background: #f3e5f5;
+        color: #6a1b9a;
+      }
+
+      .badge-u2r {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+
+      .upload-area {
+        border: 2px dashed #1e88e5;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        margin-bottom: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .upload-area:hover {
+        background: #e3f2fd;
+        border-color: #1976d2;
+      }
+
+      .upload-area.dragging {
+        background: #bbdefb;
+        border-color: #1976d2;
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        margin-bottom: 10px;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .file-info {
+        margin: 15px 0;
+        padding: 15px;
+        background: #e3f2fd;
+        border-radius: 8px;
+        display: none;
+      }
+
+      .file-info.show {
+        display: block;
+      }
+
+      button {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+      }
+
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #1e88e5;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error {
+        color: #d32f2f;
+        padding: 15px;
+        background: #ffebee;
+        border-radius: 8px;
+        margin: 15px 0;
+        display: none;
+      }
+
+      .error.show {
+        display: block;
+      }
+
+      .success {
+        color: #2e7d32;
+        padding: 15px;
+        background: #e8f5e9;
+        border-radius: 8px;
+        margin: 15px 0;
+        display: none;
+      }
+
+      .success.show {
+        display: block;
+      }
+
+      .nav-links {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
+
+      .nav-links a {
+        color: #1e88e5;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 14px;
+      }
+
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
+
+      .output-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        font-size: 13px;
+        color: #555;
+      }
+
+      .output-info h4 {
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .output-info ul {
+        margin-left: 20px;
+        line-height: 1.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎯 Attack Category Classification</h1>
+      <p class="subtitle">
+        Upload NSL-KDD CSV samples to classify attacks into broader
+        categories<br />(Normal, DoS, Probe, R2L, U2R)
+      </p>
+
+      <div class="info-box">
+        <h3>📊 Attack Categories</h3>
+        <div class="categories">
+          <div class="category-item">
+            <span class="category-badge badge-normal">Normal</span>
+            <span>Legitimate traffic</span>
+          </div>
+          <div class="category-item">
+            <span class="category-badge badge-dos">DoS</span>
+            <span>Denial of Service</span>
+          </div>
+          <div class="category-item">
+            <span class="category-badge badge-probe">Probe</span>
+            <span>Surveillance/Scanning</span>
+          </div>
+          <div class="category-item">
+            <span class="category-badge badge-r2l">R2L</span>
+            <span>Remote to Local</span>
+          </div>
+          <div class="category-item">
+            <span class="category-badge badge-u2r">U2R</span>
+            <span>User to Root</span>
+          </div>
+        </div>
+      </div>
+
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📊</div>
+          <p><strong>Click to upload</strong> or drag and drop</p>
+          <p style="font-size: 12px; color: #999; margin-top: 5px">
+            NSL-KDD CSV format
+          </p>
+          <input
+            type="file"
+            id="fileInput"
+            name="file"
+            accept=".csv"
+            required
+          />
+        </div>
+
+        <div class="file-info" id="fileInfo">
+          <p><strong>Selected file:</strong> <span id="fileName"></span></p>
+          <p><strong>Size:</strong> <span id="fileSize"></span></p>
+          <p>
+            <strong>Estimated rows:</strong> <span id="estimatedRows"></span>
+          </p>
+        </div>
+
+        <div class="error" id="errorMsg"></div>
+        <div class="success" id="successMsg"></div>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p style="margin-top: 10px">Classifying attacks into categories...</p>
+        </div>
+
+        <button type="submit" id="submitBtn">
+          🔍 Classify and Download Results
+        </button>
+      </form>
+
+      <div class="output-info">
+        <h4>📥 Output CSV Columns:</h4>
+        <ul>
+          <li><strong>specific_attack:</strong> Exact attack type detected</li>
+          <li>
+            <strong>confidence_score:</strong> Prediction confidence (0-1)
+          </li>
+          <li>
+            <strong>normal_confidence:</strong> Confidence score for Normal
+            (0-1)
+          </li>
+          <li>
+            <strong>dos_confidence:</strong> Confidence score for DoS (0-1)
+          </li>
+          <li>
+            <strong>probe_confidence:</strong> Confidence score for Probe (0-1)
+          </li>
+          <li>
+            <strong>r2l_confidence:</strong> Confidence score for R2L (0-1)
+          </li>
+          <li>
+            <strong>u2r_confidence:</strong> Confidence score for U2R (0-1)
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-links">
+        <a href="/">← Back to Home</a>
+        <a href="/results">Single Prediction</a>
+      </div>
+    </div>
+
+    <script>
+      const uploadArea = document.getElementById("uploadArea");
+      const fileInput = document.getElementById("fileInput");
+      const fileInfo = document.getElementById("fileInfo");
+      const fileName = document.getElementById("fileName");
+      const fileSize = document.getElementById("fileSize");
+      const estimatedRows = document.getElementById("estimatedRows");
+      const uploadForm = document.getElementById("uploadForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const loading = document.getElementById("loading");
+      const errorMsg = document.getElementById("errorMsg");
+      const successMsg = document.getElementById("successMsg");
+
+      // Click to upload
+      uploadArea.addEventListener("click", () => fileInput.click());
+
+      // Drag and drop
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragging");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragging");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragging");
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          fileInput.files = files;
+          displayFileInfo(files[0]);
+        }
+      });
+
+      // File selection
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          displayFileInfo(e.target.files[0]);
+        }
+      });
+
+      function displayFileInfo(file) {
+        fileName.textContent = file.name;
+        const fileSizeKB = (file.size / 1024).toFixed(2);
+        fileSize.textContent = fileSizeKB + " KB";
+
+        // Rough estimate: average ~150 bytes per row in CSV
+        const estimated = Math.floor(file.size / 150);
+        estimatedRows.textContent =
+          estimated.toLocaleString() + " rows (approx)";
+
+        fileInfo.classList.add("show");
+        errorMsg.classList.remove("show");
+        successMsg.classList.remove("show");
+      }
+
+      // Form submission
+      uploadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        submitBtn.disabled = true;
+        loading.classList.add("show");
+        errorMsg.classList.remove("show");
+        successMsg.classList.remove("show");
+
+        try {
+          const response = await fetch("/predict_category", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || "Classification failed");
+          }
+
+          // Download the file
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+
+          // Extract filename from response headers or use default
+          const contentDisposition = response.headers.get(
+            "content-disposition"
+          );
+          let downloadFilename = "category_predictions.csv";
+          if (contentDisposition) {
+            const filenameMatch =
+              contentDisposition.match(/filename="?(.+)"?/i);
+            if (filenameMatch) {
+              downloadFilename = filenameMatch[1].replace(/"/g, "");
+            }
+          }
+
+          a.download = downloadFilename;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+          // Show success message
+          successMsg.textContent =
+            "✅ Success! Category predictions downloaded: " + downloadFilename;
+          successMsg.classList.add("show");
+
+          // Reset form after delay
+          setTimeout(() => {
+            fileInput.value = "";
+            fileInfo.classList.remove("show");
+            successMsg.classList.remove("show");
+          }, 5000);
+        } catch (error) {
+          errorMsg.textContent = "❌ Error: " + error.message;
+          errorMsg.classList.add("show");
+        } finally {
+          submitBtn.disabled = false;
+          loading.classList.remove("show");
+        }
+      });
+    </script>
+  </body>
+</html>

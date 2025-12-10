@@ -9,6 +9,8 @@ __pycache__/
 
 # folder
 .New folder/
+.uploads/
+.outputs/
 
 # Distribution / packaging
 .Python

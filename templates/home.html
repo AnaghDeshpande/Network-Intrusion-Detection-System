@@ -1,137 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Network Intrusion Detection System</title>
     <style>
-        /* Reset default margins */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* Reset default margins */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6f8;
-            color: #333;
-            line-height: 1.6;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f6f8;
+        color: #333;
+        line-height: 1.6;
+      }
 
-        header {
-            background-color: #0077b6;
-            color: #fff;
-            padding: 20px 0;
-            text-align: center;
-        }
+      header {
+        background-color: #0077b6;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
 
-        header h1 {
-            font-size: 2.5rem;
-        }
+      header h1 {
+        font-size: 2.5rem;
+      }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #023e8a;
-            padding: 10px 0;
-        }
+      nav {
+        display: flex;
+        justify-content: center;
+        background-color: #023e8a;
+        padding: 10px 0;
+      }
 
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: bold;
+      }
 
-        nav a:hover {
-            text-decoration: underline;
-        }
+      nav a:hover {
+        text-decoration: underline;
+      }
 
-        main {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+      main {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
 
-        section {
-            margin-bottom: 30px;
-        }
+      section {
+        margin-bottom: 30px;
+      }
 
-        h2 {
-            color: #0077b6;
-            margin-bottom: 10px;
-        }
+      h2 {
+        color: #0077b6;
+        margin-bottom: 10px;
+      }
 
-        ul {
-            margin-left: 20px;
-        }
+      ul {
+        margin-left: 20px;
+      }
 
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #0077b6;
-            color: #fff;
-        }
+      footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: #0077b6;
+        color: #fff;
+      }
+      .prediction-links {
+        background: #e7f3ff;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+
+      .prediction-links h3 {
+        color: #0077b6;
+        margin-bottom: 15px;
+      }
+
+      .link-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .link-card {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.2s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .link-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+      .link-card a {
+        text-decoration: none;
+        color: #0077b6;
+        font-weight: bold;
+        display: block;
+      }
+
+      .link-card .icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      .link-card p {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 5px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Network Intrusion Detection System (NIDS)</h1>
+      <h1>Network Intrusion Detection System (NIDS)</h1>
     </header>
 
     <nav>
-        <a href="#overview">Overview</a>
-        <a href="#types">Types of NIDS</a>
-        <a href="#importance">Importance</a>
-        <a href="#working">How it Works</a>
-        <a href="/results">Predict</a>
+      <a href="#overview">Overview</a>
+      <a href="#types">Types of NIDS</a>
+      <a href="#importance">Importance</a>
+      <a href="#working">How it Works</a>
+      <a href="/results">Predict</a>
+      <a href="/category">Category</a>
     </nav>
 
     <main>
-        <section id="overview">
-            <h2>Overview</h2>
-            <p>
-                A Network Intrusion Detection System (NIDS) monitors network traffic for suspicious activity and 
-                alerts the system or network administrator. NIDS is an essential component of cybersecurity defense, 
-                helping to detect potential threats before they can cause damage.
-            </p>
-        </section>
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>
+          A Network Intrusion Detection System (NIDS) monitors network traffic
+          for suspicious activity and alerts the system or network
+          administrator. NIDS is an essential component of cybersecurity
+          defense, helping to detect potential threats before they can cause
+          damage.
+        </p>
+      </section>
+      <div class="prediction-links">
+        <h3>🔍 Detection Tools</h3>
+        <div class="link-grid">
+          <div class="link-card">
+            <a href="/results">
+              <div class="icon">🎯</div>
+              <strong>Single Prediction</strong>
+              <p>Analyze individual network traffic samples</p>
+            </a>
+          </div>
+          <div class="link-card">
+            <a href="/category">
+              <div class="icon">🎯</div>
+              <strong>Category Classification</strong>
+              <p>Classify attacks into broader categories (DoS, Probe, etc.)</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      <section id="types">
+        <h2>Types of NIDS</h2>
+        <ul>
+          <li>
+            <strong>Signature-based:</strong> Detects attacks by comparing
+            traffic against known attack patterns.
+          </li>
+          <li>
+            <strong>Anomaly-based:</strong> Detects attacks by identifying
+            deviations from normal network behavior.
+          </li>
+          <li>
+            <strong>Hybrid:</strong> Combines signature and anomaly detection
+            for improved accuracy.
+          </li>
+        </ul>
+      </section>
 
-        <section id="types">
-            <h2>Types of NIDS</h2>
-            <ul>
-                <li><strong>Signature-based:</strong> Detects attacks by comparing traffic against known attack patterns.</li>
-                <li><strong>Anomaly-based:</strong> Detects attacks by identifying deviations from normal network behavior.</li>
-                <li><strong>Hybrid:</strong> Combines signature and anomaly detection for improved accuracy.</li>
-            </ul>
-        </section>
+      <section id="importance">
+        <h2>Importance of NIDS</h2>
+        <ul>
+          <li>Early detection of unauthorized access and attacks.</li>
+          <li>Helps prevent data breaches and network damage.</li>
+          <li>Supports compliance with security policies and regulations.</li>
+          <li>Provides valuable information for forensic analysis.</li>
+        </ul>
+      </section>
 
-        <section id="importance">
-            <h2>Importance of NIDS</h2>
-            <ul>
-                <li>Early detection of unauthorized access and attacks.</li>
-                <li>Helps prevent data breaches and network damage.</li>
-                <li>Supports compliance with security policies and regulations.</li>
-                <li>Provides valuable information for forensic analysis.</li>
-            </ul>
-        </section>
-
-        <section id="working">
-            <h2>How NIDS Works</h2>
-            <p>
-                NIDS captures and analyzes network packets in real-time. It inspects packet headers and payloads 
-                to identify suspicious patterns or behaviors. When an intrusion is detected, the system generates 
-                alerts for network administrators, enabling rapid response to potential threats.
-            </p>
-        </section>
+      <section id="working">
+        <h2>How NIDS Works</h2>
+        <p>
+          NIDS captures and analyzes network packets in real-time. It inspects
+          packet headers and payloads to identify suspicious patterns or
+          behaviors. When an intrusion is detected, the system generates alerts
+          for network administrators, enabling rapid response to potential
+          threats.
+        </p>
+      </section>
+      <section id="categories">
+        <h2>Attack Categories in NSL-KDD Dataset</h2>
+        <ul>
+          <li>
+            <strong>Normal:</strong> Legitimate network traffic with no
+            malicious intent.
+          </li>
+          <li>
+            <strong>DoS (Denial of Service):</strong> Attacks that make
+            resources unavailable (e.g., smurf, neptune, back).
+          </li>
+          <li>
+            <strong>Probe:</strong> Surveillance and scanning attacks to gather
+            information (e.g., portsweep, nmap, ipsweep).
+          </li>
+          <li>
+            <strong>R2L (Remote to Local):</strong> Unauthorized access from a
+            remote machine (e.g., ftp_write, guess_passwd, warezmaster).
+          </li>
+          <li>
+            <strong>U2R (User to Root):</strong> Unauthorized privilege
+            escalation (e.g., buffer_overflow, rootkit, loadmodule).
+          </li>
+        </ul>
+      </section>
     </main>
 
-    <footer>
-        &copy; 2025 Network Security Research
-    </footer>
-</body>
+    <footer>&copy; 2025 Network Security Research</footer>
+  </body>
 </html>
